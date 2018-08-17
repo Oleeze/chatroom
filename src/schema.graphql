@@ -1,0 +1,8 @@
+# import Room from "./generated/prisma.graphql"
+type Query {
+  feed: [Room!]!
+}
+
+type Mutation {
+  post(room: String!): Room!
+}

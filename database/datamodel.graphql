@@ -1,0 +1,21 @@
+type Room {
+  id: ID! @unique
+  room: String! @unique
+  messages:[Message!]!
+}
+
+type Message {
+  id: ID! @unique
+  roomID: Room
+  postedBy: User
+  message: String!
+  createdAt: DateTime!
+}
+
+type User {
+  id: ID! @unique
+  name: String!
+  email: String! @unique
+  password: String!
+  messages: [Message!]!
+}

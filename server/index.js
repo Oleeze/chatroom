@@ -1,16 +1,38 @@
-const express = require('express');
-const parser = require('body-parser');
-const path = require('path');
-const app = express();
+const {GraphQLServer} = require('graphql-yoga');
+const { Prisma } = require('prisma-binding')
 
-const port = 8080;
+const resolvers = {
+  Query: {
+    feed: (root, args, context, info) => {
+      return context.db.query.rooms({}, info)
+    },
+  },
+  Mutation: {
+    post: (root, args, context, info) => {
+      return context.db.mutation.createRoom({
+        data: {
+          room: args.room,
+        },
+      }, info)
+    }
+  }
+}
 
-app.use(parser.json());
-app.use(parser.urlencoded({extended:true}))
-app.use(express.static(path.join(__dirname,'../dist/')))
-
-// app.get('/', (req, res) => {
-//   res.send(`Hello your server is running on: ${port}`)
-// })
-
-app.listen(port, () => console.log(`Listening on port: ${port}`));
+//3
+const server = new GraphQLServer({
+  typeDefs: `./server/schema.graphql`,
+  resolvers,
+  resolverValidationOptions :{
+    requireResolversForResolveType: false
+  },
+  context: req => ({
+    ...req,
+    db: new Prisma({
+      typeDefs: 'server/generated/prisma.graphql',
+      endpoint: 'https://us1.prisma.sh/oleg-rudenko-7d1129/chatroom/idk',
+      secret: 'mysecret123',
+      debug: true,
+    }),
+  }),
+})
+server.start(() => console.log(`Server is running on http://localhost:4000`));
