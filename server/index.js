@@ -1,21 +1,13 @@
-const {GraphQLServer} = require('graphql-yoga');
+const {GraphQLServer} = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const AuthPayload = require('./resolvers/AuthPayload')
 
 const resolvers = {
-  Query: {
-    feed: (root, args, context, info) => {
-      return context.db.query.rooms({}, info)
-    },
-  },
-  Mutation: {
-    post: (root, args, context, info) => {
-      return context.db.mutation.createRoom({
-        data: {
-          room: args.room,
-        },
-      }, info)
-    }
-  }
+  Query,
+  Mutation,
+  AuthPayload
 }
 
 //3
