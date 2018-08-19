@@ -1,6 +1,6 @@
-# import {Room, Message} from "./generated/prisma.graphql"
+# import Room, Message, RoomSubscriptionPayload, RoomOrderByInput from "./generated/prisma.graphql"
 type Query {
-  feed: [Room!]!
+  feed(filter:String, skip: Int, first: Int, orderBy: RoomOrderByInput): Feed!
 }
 
 type AuthPayload {
@@ -15,8 +15,18 @@ type User {
   messages: [Message!]!
 }
 
+type Feed {
+  rooms: [Room!]!
+  count: Int!
+}
+
 type Mutation {
   post(message: String!): Message!
+  makeRoom(room: String!): Room!
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
+}
+
+type Subscription {
+  newRoom: RoomSubscriptionPayload
 }

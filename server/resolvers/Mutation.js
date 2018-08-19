@@ -40,11 +40,23 @@ async function login(parent, args, context, info) {
   }
 }
 
+function makeRoom (root, args, context, info) {
+  return context.db.mutation.createRoom(
+    {
+      data: {
+        room: args.room,
+      },
+    },
+    info,
+  )
+}
+
 function post (parent, args, context, info) {
   const userId = getUserId(context)
   return context.db.mutation.createMessage(
     {
       data: {
+        roomID: {connect: {room: "Lobby1"}},
         message: args.message,
         postedBy: { connect: { id: userId } },
       },
@@ -56,5 +68,6 @@ function post (parent, args, context, info) {
 module.exports = {
   signup,
   login,
-  post
+  post,
+  makeRoom
 }
