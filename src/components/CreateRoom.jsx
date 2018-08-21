@@ -30,8 +30,12 @@ class CreateRoom extends Component {
             onChange={e => this.setState({ room: e.target.value })}
           />
         </div>
-        <Mutation mutation={POST_MUTATION} variables={{ room }}>
-          {postMutation => <button onClick={postMutation}>Create Room</button>}
+        <Mutation
+          mutation={POST_MUTATION}
+          variables={{ room }}
+          onCompleted={() => this.props.history.push("/")}
+        >
+          {postMutation => <button onClick={postMutation}>Submit</button>}
         </Mutation>
       </div>
     );

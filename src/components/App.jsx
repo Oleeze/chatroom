@@ -1,15 +1,22 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import RoomList from "./RoomList.jsx";
 import CreateRoom from "./CreateRoom.jsx";
+import Header from "./Header.jsx";
+import { Switch, Route } from "react-router-dom";
+import Login from "./Login.jsx";
 
 class App extends Component {
   render() {
     return (
       <div>
-        <p>Hello React is working</p>
-        <RoomList />
-        <CreateRoom />
+        <Header />
+        <div>
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/" component={RoomList} />
+            <Route exact path="/create" component={CreateRoom} />
+          </Switch>
+        </div>
       </div>
     );
   }
