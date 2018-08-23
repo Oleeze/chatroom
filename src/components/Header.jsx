@@ -9,7 +9,7 @@ class Header extends Component {
     return (
       <div>
         <div>
-          {authToken ? (
+          {/* {authToken ? (
             <div
               onClick={() => {
                 localStorage.removeItem(AUTH_TOKEN);
@@ -19,16 +19,17 @@ class Header extends Component {
               logout
             </div>
           ) : (
-            <Link to="/login">login</Link>
-          )}
+            // <Link to="/login">login</Link>
+            ""
+          )} */}
         </div>
         <div>
-          <Link to="/">new</Link>
+          {/* <Link to="/">new</Link>
           {authToken && (
             <div>
               <Link to="/create">submit</Link>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     );

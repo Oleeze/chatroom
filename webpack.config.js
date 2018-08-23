@@ -1,5 +1,12 @@
+const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/'
+  },
   module: {
     rules: [
       {
@@ -17,8 +24,15 @@ module.exports = {
             options: { minimize: true }
           }
         ]
+      },
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   plugins: [
     new HtmlWebPackPlugin({

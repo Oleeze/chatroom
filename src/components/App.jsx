@@ -1,25 +1,35 @@
 import React, { Component } from "react";
-import RoomList from "./RoomList.jsx";
+import Lobby from "./Lobby.jsx";
 import CreateRoom from "./CreateRoom.jsx";
 import Header from "./Header.jsx";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Login from "./Login.jsx";
+import { AUTH_TOKEN } from "../constants";
+
+import "./App.scss";
 
 class App extends Component {
   render() {
+    const authToken = localStorage.getItem(AUTH_TOKEN);
     return (
-      <div>
-        <Header />
-        <div>
-          <Switch>
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/" component={RoomList} />
-            <Route exact path="/create" component={CreateRoom} />
-          </Switch>
-        </div>
+      <div className="Body">
+        {/* <Header /> */}
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() =>
+              authToken ? <Redirect to="/lobby" /> : <Redirect to="/login" />
+            }
+          />
+          <Route exact path="/lobby" component={Lobby} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/create" component={CreateRoom} />
+        </Switch>
       </div>
     );
   }
 }
 
 export default App;
+//lato

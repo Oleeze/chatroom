@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { AUTH_TOKEN } from "../constants";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
-
+import LoginHeader from "../components/LoginHeader.jsx";
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation($email: String!, $password: String!, $name: String!) {
     signup(email: $email, password: $password, name: $name) {
@@ -29,55 +29,81 @@ class Login extends Component {
       password: ""
     };
   }
+
+  // componentWillMount() {
+  //   const authToken = localStorage.getItem(AUTH_TOKEN);
+  //   if (authToken) {
+  //     this.props.history.push(`/lobby`);
+  //   }
+  // }
+
   render() {
     const { login, name, email, password } = this.state;
+
     return (
       <div>
-        <h4>{login ? "Loging" : "Sign up"}</h4>
-        <div>
-          {!login && (
-            <input
-              value={name}
-              onChange={e => this.setState({ name: e.target.value })}
-              type="text"
-              placeholder="Your name"
-            />
-          )}
-          <input
-            value={email}
-            onChange={e => this.setState({ email: e.target.value })}
-            type="text"
-            placeholder="Your email"
-          />
-          <input
-            value={password}
-            onChange={e => this.setState({ password: e.target.value })}
-            type="password"
-            placeholder="Enter a secure password"
-          />
-        </div>
-        <div>
-          <Mutation
-            mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
-            variables={{ email, password, name }}
-            onCompleted={data => this._confirm(data)}
-          >
-            {mutation => (
-              <div onClick={mutation}>{login ? "login" : "create account"}</div>
+        <LoginHeader />
+        <div className="LoginWrapper">
+          <h2>{login ? "LOGIN" : "CREATE A NEW ACCOUNT"}</h2>
+          <div className="Login">
+            {!login && (
+              <div className="Field">
+                <p>Username</p>
+                <input
+                  className="Username"
+                  value={name}
+                  onChange={e => this.setState({ name: e.target.value })}
+                  type="text"
+                  placeholder="Your name"
+                />
+              </div>
             )}
-          </Mutation>
-          <div onClick={() => this.setState({ login: !login })}>
-            {login ? "need to create an account?" : "already have an account"}
+            <div className="Field">
+              <p>Email</p>
+              <input
+                value={email}
+                onChange={e => this.setState({ email: e.target.value })}
+                type="text"
+                placeholder="Your email"
+              />
+            </div>
+            <div className="Field">
+              <p>Password</p>
+              <input
+                value={password}
+                onChange={e => this.setState({ password: e.target.value })}
+                type="password"
+                placeholder="Enter a secure password"
+              />
+            </div>
+          </div>
+          <div className="GetIN">
+            <Mutation
+              mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
+              variables={{ email, password, name }}
+              onCompleted={data => this._confirm(data)}
+            >
+              {mutation => (
+                <div onClick={mutation}>
+                  {login ? "Join The Fun" : "create account"}
+                </div>
+              )}
+            </Mutation>
           </div>
         </div>
+        <h2
+          className="DoYouHasAccount"
+          onClick={() => this.setState({ login: !login })}
+        >
+          {login ? "< I don't have an account" : "already have an account"}
+        </h2>
       </div>
     );
   }
-
   _confirm = async data => {
     const { token } = this.state.login ? data.login : data.signup;
     this._saveUserData(token);
-    this.props.history.push(`/`);
+    this.props.history.push(`/lobby`);
   };
 
   _saveUserData = token => {
